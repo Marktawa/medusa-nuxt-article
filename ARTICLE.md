@@ -46,7 +46,7 @@ Visit the [Neon - Sign Up](https://console.neon.tech/signup) page and create a n
 
 [Create a new project](https://console.neon.tech/app/projects) in the Neon console. Give your project a name like `mystore` and your database a name like `mystoredb` then click **Create project**.
 
-Take note of your connection string which will look something like: `postgresql://craigsimakando:HvwXoZjd3O9k@ep-hidden-bonus-a5zt5s1u.us-east-2.aws.neon.tech/mystoredb?sslmode=require`. It is in the form `postgres://[user]:[password]@[host]/[dbname]`.You will provide connection string as a database URL to your Medusa server.
+Take note of your connection string which will look something like: `postgresql://dominggobana:JyyuEdr809p@df-hidden-bonus-ertd7sio.us-east-3.aws.neon.tech/mystoredb?sslmode=require`. It is in the form `postgres://[user]:[password]@[host]/[dbname]`.You will provide connection string as a database URL to your Medusa server.
 
 ### Install Medusa CLI
 
@@ -71,7 +71,7 @@ A new directory named `my-medusa-store` will be created to store the server file
 Add the connection string as the `DATABASE_URL` to your environment variables. Inside `my-medusa-store` create a `.env` file and add the following:
 
 ```
-DATABASE_URL=postgresql://craigsimakando:HvwXoZjd3O9k@ep-hidden-bonus-a5zt5s1u.us-east-2.aws.neon.tech/mystoredb?sslmode=require
+DATABASE_URL=postgresql://dominggobana:JyyuEdr809p@df-hidden-bonus-ertd7sio.us-east-3.aws.neon.tech/mystoredb?sslmode=require
 ```
 
 Run migrations and seed data to the database by running the following command:
