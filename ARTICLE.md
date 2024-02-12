@@ -130,15 +130,39 @@ npx nuxi@latest init my-nuxt-storefront
 Once the Nuxt.js project is created, change to the directory of the storefront and start the Nuxt.js project:
 ```bash
 cd my-nuxt-storefront
-npm install
-npm run dev -- -o
+npm run dev
 ```
 
 This command will run the Nuxt.js frontend on port `3000`. To test it, open your browser and visit `localhost:3000`. 
 
 ![Nuxt default frontend](nuxt-default-frontend.png)
 
-## Make the Storefront Layout
+## List the Products
+
+To see if the Nuxt app can retrieve products from the Medusa backend, we will list all the products on the home page.
+
+Replace the contents of `app.vue` with the following code:
+
+```vue
+<script setup>
+  const { products} = await useFetch(`http://localhost:9000/store/products`)
+</script>
+
+<template>
+  <div v-if="products">
+    <h1>Products</h1>
+    <ul>
+      <li v-for="product in products" :key="product.id">
+        <div>
+          <h2>{{ product.title }}</h2>
+          <img :src="product.thumbnail" alt="Product Image">
+          <p>USD {{ product.variants[0].prices[0].amount }}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</template>
+```
 
 
 
