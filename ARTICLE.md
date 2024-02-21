@@ -1,6 +1,6 @@
 # Building an ecommerce store using Nuxt and Medusa
 
-![Article Cover](medusa-nuxt-cover-2.png)
+![Article Cover](https://res.cloudinary.com/craigsims808/image/upload/v1708526494/articles/medusa-nuxt/medusa-nuxt-cover-2_gvincb.png)
 
 ## Introduction
 
