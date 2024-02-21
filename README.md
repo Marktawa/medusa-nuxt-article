@@ -125,6 +125,7 @@ DATABASE_URL=postgres://medusa_admin:medusa_admin_password@localhost:5432/medusa
 Run migrations and seed data to the database by running the following command:
 
 ```bash
+cd my-medusa-store
 medusa seed --seed-file="./data/seed.json"
 ```
 
@@ -162,7 +163,7 @@ medusa develop
 
 Open up your browser and visit `localhost:7001` to see the Medusa Admin Dashboard. Use the Email `admin@medusa-test.com` and password `supersecret` to log in.
 
-![Medusa Admin Dashboard](medusa-admin-dashboard.png)
+![Medusa Admin Dashboard](https://res.cloudinary.com/craigsims808/image/upload/v1708526486/articles/medusa-nuxt/medusa-admin-dashboard_w4uadw.png)
 
 ## Install and setup the Nuxt.js storefront
 
@@ -203,7 +204,7 @@ yarn dev
 
 This command will run the storefront app by default at http://localhost:3000. To test it, open your browser and go to http://localhost:3000. You will get something like this:
 
-![Nuxt Demo Home page](nuxt-demo-home-page.png)
+![Nuxt Demo Home page](https://res.cloudinary.com/craigsims808/image/upload/v1708526485/articles/medusa-nuxt/nuxt-demo-home-page_eexghl.png)
 
 Later on, you will change the default port to learn how to integrate your frontend with the Medusa server in a port that is not the default.
 
