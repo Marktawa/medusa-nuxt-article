@@ -216,7 +216,7 @@ In conclusion, this tutorial has covered how to set up a basic ecommerce store u
 
 ## Resources
 - [GitHub Repo](https://github.com/Marktawa/medusa-nuxt)
-<!-- -[Source Code]() -->
+- [Source Code](https://github.com/Marktawa/medusa-nuxt/releases/tag/v1.0.0)
 
 ## Author
 
