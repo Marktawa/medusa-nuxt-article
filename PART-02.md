@@ -4,11 +4,18 @@
 
 ## Introduction
 
-[Nuxt]() is a meta-framework built on top of [Vue.js](), a JavaScript library. It features SSR, SSG, SEO, File-System routing, Caching etc. It can be used to build ecommerce storefronts.
+[Nuxt](https://nuxt.com/) is a meta-framework built on top of [Vue.js](), a JavaScript library. It features SSR, SSG, SEO, File-System routing, Caching etc. It can be used to build ecommerce storefronts.
 
-[Medusa]() is a toolkit for developers to create digital commerce applications. It uses a Node.js backend with the core API, plugins, and modules installed through npm.
+[Medusa](docs.medusajs.com) is a toolkit for developers to create digital commerce applications. It uses a Node.js backend with the core API, plugins, and modules installed through npm.
 
 In this project, you will learn how an ecommerce store can be built using Nuxt for the frontend and Medusa for the backend. To do that, first, you will create a Nuxt project and set a few components, pages and layouts. Then, you will link the Nuxt project with a Medusa server to get the store products and display them on the home page including a product's page, and a product detail page.
+
+- [Part 01: Setup and Installation](https://github.com/Marktawa/medusa-nuxt-article)
+- [Part 02: Storefront Design](https://github.com/Marktawa/medusa-nuxt-article/PART-02.md) 
+- Part 03:
+- Part 04:
+
+This tutorial is Part 02 of the series. It focuses on the design of the Nuxt storefront.
 
 ## Prerequisites
 
@@ -25,232 +32,9 @@ In addition to knowing these tools, your computer system should have the followi
 - yarn (optional)
 - git (optional)
 
-## Install and setup the Medusa Backend
-
-In this step you will install and set up the Medusa Server backend. 
-
-Open up your terminal and create a project folder to contain all the source code for the entire project. Name it `my-store`.
-
-```bash
-mkdir my-store
-```
-
-### Set up PostgreSQL on Neon
-
-If you have PostgreSQL installed locally, you can skip this step. 
-
-Visit the [Neon - Sign Up](https://console.neon.tech/signup) page and create a new account.
-
-[Create a new project](https://console.neon.tech/app/projects) in the Neon console. Give your project a name like `mystore` and your database a name like `mystoredb` then click **Create project**.
-
-Take note of your connection string which will look something like: `postgresql://dominggobana:JyyuEdr809p@df-hidden-bonus-ertd7sio.us-east-3.aws.neon.tech/mystoredb?sslmode=require`. It is in the form `postgres://[user]:[password]@[host]/[dbname]`.You will provide connection string as a database URL to your Medusa server.
-
-### Install Medusa CLI
-
-In your terminal, inside the `my-store` folder run the following command to install the Medusa CLI. We will use it to install the Medusa server.
-
-```bash
-npm install @medusajs/medusa-cli -g
-```
-
-### Create a new Medusa project
-
-```bash
-medusa new my-medusa-store
-```
-
-You will be asked to specify your PostgreSQL database credentials. Choose "Skip database setup".
-
-A new directory named `my-medusa-store` will be created to store the server files
-
-### Configure Database - Neon Users
-
-If you have PostgreSQL installed locally, you can skip this step. 
-
-Add the connection string as the `DATABASE_URL` to your environment variables. Inside `my-medusa-store` create a `.env` file and add the following:
-
-```
-DATABASE_URL=postgresql://dominggobana:JyyuEdr809p@df-hidden-bonus-ertd7sio.us-east-3.aws.neon.tech/mystoredb?sslmode=require
-```
-
-### Configure Database - Local PostgreSQL DB
-
-If you have PostgreSQL configured on Neon, you can skip this step. 
-
-Access the PostgreSQL console to create a new user and database for the Medusa server.
-
-```bash
-sudo -u postgres psql
-```
-
-To create a new user named `medusa_admin` run this command:
-
-```sql
-CREATE USER medusa_admin WITH PASSWORD 'medusa_admin_password';
-```
-
-Now, create a new database named `medusa_db` and make `medusa_admin` the owner.
-
-```sql
-CREATE DATABASE medusa_db OWNER medusa_admin;
-```
-
-Last, grant all privileges to `medusa_admin` and exit the PostgreSQL console.
-
-```sql
-GRANT ALL PRIVILEGES ON DATABASE medusa_db TO medusa_admin;
-```
-
-```sql
-exit
-```
-
-Add the connection string as the `DATABASE_URL` to your environment variables. Inside `my-medusa-store` create a `.env` file and add the following:
-
-```
-DATABASE_URL=postgres://medusa_admin:medusa_admin_password@localhost:5432/medusa_db
-```
-
-### Seed Database
-
-Run migrations and seed data to the database by running the following command:
-
-```bash
-medusa seed --seed-file="./data/seed.json"
-```
-
-### Start your Medusa backend
-
-```bash
-medusa develop
-```
-
-The Medusa server will start running on port `9000`.
-
-Test your server:
-```bash
-curl localhost:9000/store/products
-```
-
-If it is working, you should see a list of products.
-
-## Install and Serve Medusa Admin with the Backend
-
-This section explains how to install the admin to be served with the Medusa Backend.
-
-### Install the package
-
-Inside `my-medusa-store` stop your Medusa server, `CTRL + C` and run the following command to install the Medusa Admin Dashboard.
-
-```bash
-npm install @medusajs/admin
-```
-
-Test your install by re-running your server.
-```bash
-medusa develop
-```
-
-Open up your browser and visit `localhost:7001` to see the Medusa Admin Dashboard. Use the Email `admin@medusa-test.com` and password `supersecret` to log in.
-
-![Medusa Admin Dashboard](/medusa-admin-dashboard.png)
-
-## Install and setup the Nuxt.js storefront
-
-
-<!-- Nuxt 3 
-### Install a Nuxt.js project
-
-Create a Nuxt project, by running the following command inside the `my-store` directory:
-```bash
-npx nuxi@latest init my-nuxt-storefront
-```
-
-### Run Nuxt.js project
-
-Once the Nuxt.js project is created, change to the directory of the storefront and start the Nuxt.js project:
-```bash
-cd my-nuxt-storefront
-npm run dev
-```
-
-This command will run the Nuxt.js frontend on port `3000`. To test it, open your browser and visit `localhost:3000`. 
-
-![Nuxt default frontend](nuxt-default-frontend.png)
-
-## List the Products
-
-To see if the Nuxt app can retrieve products from the Medusa backend, we will list all the products on the home page.
-
-Replace the contents of `app.vue` with the following code:
-
-```vue
-<script setup>
-  const { products} = await useFetch(`http://localhost:9000/store/products`)
-</script>
-
-<template>
-  <div v-if="products">
-    <h1>Products</h1>
-    <ul>
-      <li v-for="product in products" :key="product.id">
-        <div>
-          <h2>{{ product.title }}</h2>
-          <img :src="product.thumbnail" alt="Product Image">
-          <p>USD {{ product.variants[0].prices[0].amount }}</p>
-        </div>
-      </li>
-    </ul>
-  </div>
-</template>
-```
-
--->
-
-### Install a Nuxt.js project
-
-To install a Nuxt project, you can get started quickly with `create-nuxt-app`. Open your terminal and run the following command:
-
-```bash
-npx create-nuxt-app my-nuxt-storefront
-```
-
-Configure your Nuxt project as follows:
-
-```bash
-Project name: my-nuxt-storefront
-Programming language: JavaScript
-Package manager: Yarn
-UI framework: Windi CSS
-Template engine: HTML
-Nuxt.js modules: Axios - Promise based HTTP client
-Linting tools: ESLint
-Testing framework: None
-Rendering mode: Single Page App
-Deployment target: Static (Static/Jamstack hosting)
-Development tools: 
-Continuous integration: None
-Version control system: Git
-```
-
-Run Nuxt.js project
-
-Once the Nuxt.js project is created, change to the directory of the storefront and start the dev server:
-
-```bash
-cd my-nuxt-storefront
-yarn dev
-```
-
-This command will run the storefront app by default at http://localhost:3000. To test it, open your browser and go to http://localhost:3000. You will get something like this:
-
-![Nuxt Demo Home page](nuxt-demo-home-page.png)
-
-Later on, you will change the default port to learn how to integrate your frontend with the Medusa server in a port that is not the default.
-
 ## Make the storefront layout
 
-Before connecting the Medusa server with the storefront, you need to add some components and pages to the storefront. Open the storefront’s project in your preferred code editor.
+Before connecting the Medusa server with the storefront, you need to add some components and pages to the storefront. Open the storefront’s project `my-nuxt-storefront` in your preferred code editor.
 
 You should see the following directories:
 
@@ -275,7 +59,7 @@ my-nuxt-storefront
 
 You will be focusing mainly on the `components` and `pages` directories to design the layout for the storefront.
 
-### Components
+## Components
 
 Components are what make up the different parts of your page. They can be reused and imported into your pages, layouts, and even other components.
 
@@ -288,7 +72,7 @@ The storefront you are creating will have the following components:
 
 Go to the `components` directory and delete the default components that come with the Nuxt.js installation. Then add the following files.
 
-#### Logo 
+### Logo 
 
 Add `components/App/Logo.vue`.
 
@@ -310,7 +94,7 @@ export default {
 </script>
 ```
 
-#### Navbar
+### Navbar
 
 Add `components/App/Navbar.vue`.
 
@@ -390,7 +174,7 @@ export default {
 </script>
 ```
 
-#### Footer
+### Footer
 
 Add `components/App/Footer.vue`.
 
@@ -419,7 +203,7 @@ export default {
 </script>
 ```
 
-#### ProductCard 
+### ProductCard 
 
 Add `components/ProductCard.vue`.
 
@@ -485,7 +269,7 @@ export default {
 </script>
 ```
 
-### Pages
+## Pages
 
 The `pages` directory contains your storefront views and routes. For this tutorial you will need only 3 pages:
 
@@ -584,7 +368,7 @@ This page will be the home for your storefront. It is composed of a hero, header
 
 Now, you need to create a new directory called `products` which will hold the products page, `/pages/products/index.vue` and the product detail page `/pages/products/_id.vue`. Add the following code to these pages.
 
-#### Products page 
+### Products page 
 
 Add /pages/products/index.vue
 
@@ -629,7 +413,7 @@ export default {
 
 This page is similar to the home page but without the hero header. Here you will show a grid with all the products sent by the Medusa server.
 
-#### Product Detail page
+### Product Detail page
 
 Add `/pages/products/_id.vue`.
 
@@ -795,11 +579,11 @@ export default {
 
 On this page, you will display all the information related to a specific product. For example, sizes, images, price, description, variants, etc...
 
-> NOTE:
+> *NOTE:*
 >
-> The three pages include a `product` object on the `data` function to showcase the design while there isn’t a server to send requests. Once you connect the storefront with the Medusa server, the data coming from the server will replace the data in the `product` object.
+> *The three pages include a `product` object on the `data` function to showcase the design while there isn’t a server to send requests. Once you connect the storefront with the Medusa server, the data coming from the server will replace the data in the `product` object.*
 
-### Layouts
+## Layouts
 
 Layouts are a great help when you want to have a basic structure for your Nuxt app. For example, a navbar and footer that will be shown on all the pages of the app. By default, a Nuxt project doesn't come with layouts, but it is easy to add them to your project.
 
@@ -896,143 +680,19 @@ yarn dev
 
 Visit localhost:3333 in your browser.
 
-![Nuxt Storefront with static data](nuxt-storefront-static.png)
+![Nuxt Storefront with static data](https://res.cloudinary.com/craigsims808/image/upload/v1708771042/articles/medusa-nuxt/nuxt-storefront-static_rt6gou.png)
 
-The storefront just shows static data for now. You will link the storefront with the Medusa server in the next section.
-
-## Link Medusa server with storefront
-
-### Configure Storefront URL
-
-To link the server with the storefront, first, open up your Medusa project in your IDE, then open the `.env` file where all your environment variables are set up.
-
-Add the variable `STORE_CORS` with the value of the URL where your storefront will be running. Remember that you changed the default port on the storefront, therefore the URL is `http://localhost:3333`.
-
-```
-STORE_CORS=http://localhost:3333
-```
-
-After this, your Medusa server will be ready to receive a request from your storefront and send back responses if everything works as expected.
-
-### Testing connection with Medusa server
-
-To list the products on the home page, you need to test whether you can send requests from your storefront to the Medusa server and receive data to display on the frontend.
-
-Change the base URL for the `axios` module that you’ll use to make the requests to the server.
-
-Open the `nuxt.config.js` file and look for the `axios` property. Change the `baseURL` property to match the URL of the medusa server.
-
-```js
-axios: {
-  baseURL: 'http://localhost:9000/'
-},
-```
-
-To fetch data from the API, this tutorial uses the `fetch` function that Nuxt.js offers as part of the core.
-
-Open the file `/pages/index.vue` and add the `fetch` function in the script section:
-
-```js
-async fetch () {
-    try {
-      const { products } = await this.$axios.$get('/store/products')
-            console.log(products)
-      this.products = products
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log('The server is not responding')
-    }
-  }
-```
-
-This function receives just one parameter `$axios` which is a service that allows making an HTTP request to the Medusa server. So, inside the function, a request is sent to the endpoint `/store/products` to obtain the list of products from the Medusa server. Then, the list of products is returned.
-
-To test this out, start your Medusa server and Nuxt.js dev server.
-
-Visit localhost:3333 in your browser and open the Developer Tools. You must see a list of products in the console.
-
-### Display Products on the Home Page
-
-Next, let's render the products from the Medusa server on the storefront **Home** page. 
-
-Update the `fetch` function in `/pages/index.vue`:
-
-```js
-async fetch () {
-    try {
-        const { products } = await this.$axios.$get('/store/products')
-        this.products = products.splice(0, 4)
-    } catch(e) {
-        // eslint-disable-next-line no-console
-        console.log('The server is not responding')
-  }
-}
-```
-
-With this update, product data from the server replaces the hardcoded `products` array on the **Home** page.
-
-The `v-for` applied on the `ProductCard` iterates the `products` array and passes to the component, as a `prop`, a product with all the [properties specified on the Medusa API](https://docs.medusajs.com/api/store/product) for that endpoint.
-
-Refresh the storefront **Home** page.
-
-![Storefront Home page with list of products](storefront-home.png)
-
-### Display Products on the Products Page
-
-In the navigation bar, there is a "Products" link. Clicking on it redirects you to the **Products** page, where currently only one static product is displayed. Let's rectify this so that all the products from your Medusa server are shown on the page.
-
-Open the `/pages/products/index.vue` file, go to the `script` section and add the following `fetch` function:
-
-```js
-async fetch () {
-  try {
-    const { products } = await this.$axios.$get('/store/products')
-    this.products = products
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.log('The server is not responding')
-  }
-}
-```
-
-Visit localhost:3333/products in your browser.
-
-![Storefront Products page with list of products](storefront-products.png)
-
-### Display Product Details
-
-The final page to update is the **Product Detail** page. Clicking on any product on either the **Home** page or the **Products** page redirects you to the product's detail page, where currently no details are displayed. To fix this, you need to request specific product information from the Medusa server to display all relevant details.
-
-Open the file `/pages/products/_id.vue` and add the following `fetch` function:
-
-```js
-async fetch () {
-  try {
-    const { product } = await this.$axios.$get(`/store/products/${this.$route.params.id}`)
-    this.product = product
-    this.imageToShow = this.product.images[0].id
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.log('The server is not responding')
-  }
-},
-```
-
-Click on any product now, and you’ll see all details rendered on the page.
-
-![Storefront Product Details page](storefront-product-details.png)
+The storefront just shows static data for now. You will link the storefront with the Medusa server in the next part of the tutorial series.
 
 ## Conclusion
 
-This article provided a step-by-step guide on how to build an ecommerce store using Nuxt.js and Medusa. It covered installing and setting up the Medusa backend, configuring the database, and seeding sample data. It then walked through creating a Nuxt.js project, designing the storefront layout with components, pages, and layouts. The guide showed how to style the storefront, change the default port, and connect the Nuxt.js frontend to the Medusa backend. It demonstrated fetching product data from the Medusa API and rendering it on the home page, products page, and product detail page.
+In this part of the tutorial, we designed the layout and components for the Nuxt storefront. We created components like the navbar, footer, product card, and pages for the home, products listing, and product details. We also configured layouts to provide a consistent structure across pages. We styled the components using the Windi CSS utility library and updated some configuration settings like changing the default port. 
 
-The next steps for you would be to check the Medusa API to learn about all the different requests that you can call from your storefront to turn your Nuxt.js storefront into a full-fledged online store.
+By the end, we had a basic storefront design in place with static product data. In the next part, we will connect this Nuxt frontend to the Medusa backend to fetch and display real product information, transforming it into a fully functional ecommerce site.
 
-For example, you can implement the Cart functionality. The process would involve making the pages or components on the Nuxt.js app and then making the respective requests to the Medusa server to get the data to render on the storefront.
-
-<!-- ## Resources -->
-<!-- -[GitHub Repo]() -->
-<!-- -[Source Code]() -->
+## Resources
+- [GitHub Repo](https://github.com/Marktawa/medusa-nuxt)
+- [Source Code](https://github.com/Marktawa/medusa-nuxt/releases/tag/v2.0.0)
 
 ## Author
 
