@@ -12,7 +12,7 @@ In this project, you will learn how an ecommerce store can be built using Nuxt f
 
 - [Part 01: Setup and Installation](https://github.com/Marktawa/medusa-nuxt-article)
 - [Part 02: Storefront Design](https://github.com/Marktawa/medusa-nuxt-article/PART-02.md) 
-- Part 03:
+- [Part 03: Link Server to Storefront](https://github.com/Marktawa/medusa-nuxt-article/PART-03.md):
 - Part 04:
 
 This tutorial is Part 02 of the series. It focuses on the design of the Nuxt storefront.
